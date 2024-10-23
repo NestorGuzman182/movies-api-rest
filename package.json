@@ -1,0 +1,11 @@
+{
+  "name": "movies-api-rest",
+  "version": "1.0.0",
+  "description": "Movies API REST",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "remy lebeau",
+  "license": "ISC"
+}
