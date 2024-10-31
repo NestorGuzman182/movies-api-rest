@@ -4,10 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remy Movies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./styles/app.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Remy Movies</h1>
+    <header>
+        <div id="header" class="header-container">
+            <h2 class="header-title">Remy Movies</h2>
+            <ul>
+                <li><a href="">Home</a></li>
+                <li><a href="">Trending Movies</a></li>
+                <li><a href="">Categories</a></li>
+                <li><a href="">Popular</a></li>
+                <li><a href="">Upcoming</a></li>
+            </ul>
+            <form id="search-form" class="search-container">
+                <input id='input-form' type="text" placeholder="Search">
+                <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+        </div>
+    </header>
+    <div class="general">
+        <div class="controls inactive">
+            <button id="back-btn" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+        </div>
+        <section id="trending-preview" class="trending-container">
+            <div id="hero" class="loader">
+                <article class="hero-info">
+                </article>
+            </div>
+            <h1 class="title">Trending</h1>
+            <article class="slider-container">
+                <div class="movie-container loader">
+                    <div class="movie-img movie-img--loader"></div>
+                </div>
+                <div class="movie-container loader">
+                    <div class="movie-img movie-img--loader"></div>
+                </div>
+                <div class="movie-container loader">
+                    <div class="movie-img movie-img--loader"></div>
+                </div>
+            </article>
+        </section>
+        <section id="categories-preview">
+            <h1 class="title">Categories<span id="category-name"></span></h1>
+            <article class="categories-list">
+            </article>
+        </section>
+        <section id="movie-detail" class="movie-detail">
+            <article class="info-movie">
+            </article>
+            <h1 class="title">Similar movies.</h1>
+            <article class="similar-movies">
+            </article>
+        </section>
+        <section id="search-preview" class="inactive">
+            <h1 class="title">Tus resultados para <span id="search-name"></span> son:</h1>
+            <article class="search-list">
+            </article>
+        </section>
+    </div>
+    <footer>
+        <p>© All right reserved | Néstor Guzmán 2022</p>
+    </footer>
 </body>
-<script src="./src/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="module" src="./src/main.js"></script>
 </html>
