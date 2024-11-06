@@ -1,17 +1,20 @@
 import { KEY } from "./key.js";
-import { init, change } from "./navigation.js"
+import { init, change, infiniteScrolling } from "./navigation.js"
 import { detailMovieContainer, 
         trendingPreviewContainer, 
         categoriesPreviewContainer, 
         searchPreviewContainer,
         similarMoviesContainer,
+        generalMoviesContainer,
         categoryLabel,
-        resultSearchLabel,
+        resultSearchLabel, 
         movieSection, 
-        searchInput
+        searchInput,
+        generalTitle
 } from './nodes.js';
 
-init, change;
+init, change, infiniteScrolling;
+
 const api = axios.create({
     baseURL: 'https://api.themoviedb.org/3/',
     headers: {
@@ -21,17 +24,23 @@ const api = axios.create({
         'api_key': KEY
     }
 });
+
 const lazyLoader = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if(entry.isIntersecting) {
             const url = entry.target.getAttribute('data-image');
             entry.target.setAttribute('src', url)
-        }
-        console.log(entry)
-    });
+        }    });
 })
-let intervalId;
+
 const baseImgURL = 'https://image.tmdb.org/t/p/w300';
+
+
+let intervalId;
+let page = 0;
+let maxPage;
+
+
 
 
 export const getTrendingMoviesPreview = async function  getTrendingMoviesPreview() {
@@ -80,22 +89,54 @@ export const getResultSearchMovies = async function getResultSearchMovies(query)
     }
 }
 
-async function getTrendingMovies() {
+export const getTrendingMovies = async function getTrendingMovies() {
     const { data } = await api('trending/movie/day?');
     const movies = data.results;
+    maxPage = data.total_pages;
+    console.log(maxPage)
+    generalTitle.innerText = 'Trending';
     
-    renderMoviesList(trendingPreviewContainer, movies);
+   renderMoviesList(generalMoviesContainer, movies, { lazyLoad: true, clean: true});
+
 }
 
 async function  getMoviesByCategories(id) {
+
     const { data } = await api('discover/movie', {
         params: {
             with_genres: id
         }
     });
     const movies = data.results;
-    renderMoviesList(categoriesPreviewContainer, movies, true)
+    renderMoviesList(categoriesPreviewContainer, movies, { lzLoad: true, clean:false});
+    if(scrollIsBottom) {
+        console.log('bottom scroll', scrollIsBottom)
+        //getPaginatedMovies(id)
+    } 
+        
+/*     const btnLoadMore = document.createElement('button');
+    btnLoadMore.innerText = 'Ver mas';
+    btnLoadMore.addEventListener('click', () => getPaginatedMovies(id));
+    categoriesPreviewContainer.appendChild(btnLoadMore); */
 }
+
+export const getPaginatedTradeMovies = () => getPaginatedMovies('trending/movie/day?', generalMoviesContainer);
+
+async function getPaginatedMovies(path, container) {
+    const pageIsNotmax = page < maxPage;
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    const scrollIsBottom = (scrollTop + clientHeight) >= scrollHeight - 15;
+
+    if(scrollIsBottom && pageIsNotmax) {
+        page++
+        const { data } = await api(path, {
+            params: {
+                page: page
+            }
+        });
+        const movies = data.results;
+        renderMoviesList(container, movies, { lzLoad: true, clean: false});
+}}
 
 function renderHeroMovie(movie) {
     const hero = document.getElementById('hero');
@@ -126,9 +167,16 @@ function renderHeroMovie(movie) {
  
 }
 
-function renderMoviesList(container, movies, lzLoad=false) {
-    container.innerHTML = '';
-
+function renderMoviesList(
+        container, 
+        movies, 
+        { 
+            lzLoad=false, 
+            clean=true 
+        } = {}) {
+    if(clean) { 
+        container.innerHTML = '';
+    } 
 
     movies.map(movie => {
         
@@ -139,7 +187,6 @@ function renderMoviesList(container, movies, lzLoad=false) {
         movieImg.classList.add('movie-img');
         movieImg.classList.remove('loader');
         movieImg.setAttribute('alt', movie.title);
-        console.log(movie.poster_path === null)
         movieImg.setAttribute( 
             lzLoad ? 'data-image': 'src', 
             movie.poster_path ? baseImgURL + movie.poster_path : '../src/img/movie-poster-template-03.jpg'

@@ -39,6 +39,11 @@ header {
     color: var(--primary)
 }
 
+.button-title {
+    display: flex;
+    justify-content: space-between;
+}
+
 .header-container {
     border-radius: var(--element-radius);
 }
@@ -92,6 +97,11 @@ section {
     color: var(--white);
     margin-top: var(--space);
 }
+
+#general-title {
+    text-align: center;
+}
+
 .slider-container {
     display: flex;
     overflow-x: auto;
@@ -107,6 +117,7 @@ section {
 }
 
 .movie-container p {
+    max-width: 200px ;
     color: var(--white);
     padding: calc(var(--space)/2) 0px;
     font-weight: 700;
@@ -153,7 +164,7 @@ section {
     margin-top: calc(var(--space) * 2);
 }
 
-.categories-list, .search-list {
+.categories-list, .search-list, .general-list {
     display: flex;
     gap: var(--space);
     max-width: 1500px;

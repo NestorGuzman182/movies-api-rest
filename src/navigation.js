@@ -1,18 +1,28 @@
-import { getCategoriesPreview, getTrendingMoviesPreview, getResultSearchMovies } from './main.js'
+import { getCategoriesPreview, getTrendingMoviesPreview, 
+         getResultSearchMovies, getTrendingMovies,
+        getPaginatedTradeMovies 
+} from './main.js'
 import { trendingView, controlsBtn, 
     hero, categoriesSection, movieSection, searchMoviesSection,
     searchInput, 
-    searchButton, backButton, 
-    trendingPreviewContainer} from './nodes.js';
+    searchButton, backButton, viewMoreTradesMovies,
+    trendingPreviewContainer, generalSection
+} from './nodes.js';
 
 searchButton.addEventListener('click', () => location.hash = `search=${searchInput.value}`);
 backButton.addEventListener('click', () => history.back());
+viewMoreTradesMovies.addEventListener('click', () => location.hash = 'trends')
+let infiniteScroll;
 
 export const init = window.addEventListener('DOMContentLoaded', navigator, false);
 export const change = window.addEventListener('hashchange', navigator, false);
-
+export const infiniteScrolling = window.addEventListener('scroll', infiniteScroll, false);
 
 function navigator() {
+    if(infiniteScroll) {
+        window.removeEventListener('scroll', infiniteScroll, { passive: false });
+        infiniteScroll = undefined;
+    }
     if (location.hash.startsWith('#trends')) {
         trendsPage();
     } else if (location.hash.startsWith('#search=')) {
@@ -26,6 +36,10 @@ function navigator() {
     }
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+    console.log(infiniteScroll)
+    if(infiniteScroll) {
+        window.addEventListener('scroll', infiniteScroll);
+    }
 }
 
 function homePage() {
@@ -65,7 +79,11 @@ function searchPage() {
 function trendsPage() {
     controlsBtn.classList.remove('inactive');
     hero.classList.add('inactive');
-    trendingView.style.textAlign = 'center';
-    trendingPreviewContainer.classList.add('trending-list');
+    trendingView.classList.add('inactive');
     categoriesSection.classList.add('inactive');
+    trendingView.style.textAlign = 'center';
+    generalSection.classList.remove('inactive');
+
+    getTrendingMovies();
+    infiniteScroll = getPaginatedTradeMovies;
 }
