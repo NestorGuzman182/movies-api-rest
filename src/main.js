@@ -2,7 +2,8 @@ import { KEY } from "./key.js";
 import { init, change, infiniteScrolling } from "./navigation.js"
 import { detailMovieContainer, 
         trendingPreviewContainer, 
-        categoriesPreviewContainer, 
+        categoriesPreviewContainer,
+        favoritesMoviesContainer, 
         searchPreviewContainer,
         similarMoviesContainer,
         generalMoviesContainer,
@@ -12,8 +13,12 @@ import { detailMovieContainer,
         searchInput,
         generalTitle
 } from './nodes.js';
+import { createLanguages, lang } from "./language.js";
 
 init, change, infiniteScrolling;
+createLanguages();
+
+//  Data
 
 const api = axios.create({
     baseURL: 'https://api.themoviedb.org/3/',
@@ -25,6 +30,26 @@ const api = axios.create({
     }
 });
 
+function favoritesMoviesList () {
+    return JSON.parse(localStorage.getItem('liked_movies'));
+}
+
+function saveFavoriteMovie(movie) {
+    const listMovies = favoritesMoviesList();
+
+    if(listMovies.length > 0 && listMovies.find( item => item.id === movie.id)) {
+        const arr = listMovies.findIndex(item => item.id === movie.id)
+        console.log(arr)
+        favoriteMovies.splice(arr, 1)
+    } else {
+        favoriteMovies.push(movie)
+    }
+    localStorage.setItem('liked_movies', JSON.stringify(favoriteMovies));
+    getFavoritesPreview();
+}
+
+// Utils
+
 const lazyLoader = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if(entry.isIntersecting) {
@@ -35,16 +60,18 @@ const lazyLoader = new IntersectionObserver((entries) => {
 
 const baseImgURL = 'https://image.tmdb.org/t/p/w300';
 
-
 let intervalId;
-let page = 0;
+let page = 1;
 let maxPage;
-
-
+const favoriteMovies = [];
 
 
 export const getTrendingMoviesPreview = async function  getTrendingMoviesPreview() {
-    const { data } = await api('trending/movie/day?');
+    const { data } = await api('trending/movie/day?', {
+        params: {
+            language: lang
+        }
+    });
     const movies = data.results;
     
     let index=0;
@@ -70,12 +97,28 @@ export const getCategoriesPreview = async function  getCategoriesPreview() {
     renderCategoryList(categoriesPreviewContainer, categories);
 }
 
+export function getFavoritesPreview() {
+    const favoriteMovies = JSON.parse(localStorage.getItem('liked_movies'));
+    if(favoriteMovies && favoriteMovies.length > 0) {
+        renderMoviesList(favoritesMoviesContainer, favoriteMovies, { lzLoad: true, clean: true})
+    } else {
+        favoritesMoviesContainer.innerHTML = '';
+        const message = document.createElement('p');
+        message.classList.add('title');
+        message.innerText = 'Aun no tienes favoritos agregados';
+        message.style.width = '100vw';
+        message.style.textAlign = 'center';
+        favoritesMoviesContainer.appendChild(message)
+    }
+}
+
 export const getResultSearchMovies = async function getResultSearchMovies(query) {
     const { data } = await api('search/movie', {
         params: { query }
     });
-
     const movies = data.results;
+    maxPage = data.total_pages;
+
     if(movies.length === 0){
         searchPreviewContainer.innerHTML = '';
         const notFoundText = document.createElement('h1');
@@ -85,15 +128,15 @@ export const getResultSearchMovies = async function getResultSearchMovies(query)
         searchPreviewContainer.appendChild(notFoundText)
     }else{
         resultSearchLabel.textContent = searchInput.value;
-        renderMoviesList(searchPreviewContainer, movies, true);
+        renderMoviesList(generalMoviesContainer, movies, { lazyLoad: true, clean: true});
     }
 }
 
 export const getTrendingMovies = async function getTrendingMovies() {
     const { data } = await api('trending/movie/day?');
     const movies = data.results;
+
     maxPage = data.total_pages;
-    console.log(maxPage)
     generalTitle.innerText = 'Trending';
     
    renderMoviesList(generalMoviesContainer, movies, { lazyLoad: true, clean: true});
@@ -101,42 +144,39 @@ export const getTrendingMovies = async function getTrendingMovies() {
 }
 
 async function  getMoviesByCategories(id) {
-
     const { data } = await api('discover/movie', {
         params: {
             with_genres: id
         }
     });
     const movies = data.results;
-    renderMoviesList(categoriesPreviewContainer, movies, { lzLoad: true, clean:false});
-    if(scrollIsBottom) {
-        console.log('bottom scroll', scrollIsBottom)
-        //getPaginatedMovies(id)
-    } 
-        
-/*     const btnLoadMore = document.createElement('button');
-    btnLoadMore.innerText = 'Ver mas';
-    btnLoadMore.addEventListener('click', () => getPaginatedMovies(id));
-    categoriesPreviewContainer.appendChild(btnLoadMore); */
+
+    maxPage = data.total_pages;
+    renderMoviesList(generalMoviesContainer, movies, { lzLoad: true, clean:false});
 }
 
-export const getPaginatedTradeMovies = () => getPaginatedMovies('trending/movie/day?', generalMoviesContainer);
-
-async function getPaginatedMovies(path, container) {
+async function getPaginatedMovies(path, {idCategory = null, query = null} ={}) {
+    const scrollIsBottom = handleScroll();
     const pageIsNotmax = page < maxPage;
-    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-    const scrollIsBottom = (scrollTop + clientHeight) >= scrollHeight - 15;
 
-    if(scrollIsBottom && pageIsNotmax) {
-        page++
-        const { data } = await api(path, {
-            params: {
-                page: page
-            }
-        });
-        const movies = data.results;
-        renderMoviesList(container, movies, { lzLoad: true, clean: false});
-}}
+    if (scrollIsBottom && pageIsNotmax) {
+      console.log(query);
+      page++;
+      const { data } = await api(path, {
+        params: {
+          page: page,
+          with_genres: idCategory,
+          query: query,
+        },
+      });
+
+      const movies = data.results;
+      renderMoviesList(generalMoviesContainer, movies, {
+        lzLoad: true,
+        clean: false,
+      });
+    }
+}
 
 function renderHeroMovie(movie) {
     const hero = document.getElementById('hero');
@@ -179,7 +219,6 @@ function renderMoviesList(
     } 
 
     movies.map(movie => {
-        
         const movieContainer = document.createElement('div');
         movieContainer.classList.add('movie-container');
 
@@ -191,9 +230,24 @@ function renderMoviesList(
             lzLoad ? 'data-image': 'src', 
             movie.poster_path ? baseImgURL + movie.poster_path : '../src/img/movie-poster-template-03.jpg'
         )
-       if(lzLoad) {
+
+        const likeButton = document.createElement('button');
+        const starIcon = document.createElement('i');
+        likeButton.classList.add('movie-btn');
+        starIcon.classList.add('fa-solid', 'fa-star');
+        validateButtonLike(starIcon, movie);
+        likeButton.appendChild(starIcon);
+        movieContainer.appendChild(likeButton);
+
+        likeButton.addEventListener('click', () => {
+            starIcon.classList.toggle('btn-primary');
+            starIcon.classList.toggle('btn-secondary');
+            saveFavoriteMovie(movie);
+        })
+
+        if(lzLoad) {
            lazyLoader.observe(movieImg);
-       }
+        }
 
         const titleMovie = document.createElement('p');
         titleMovie.textContent = movie.title;
@@ -202,12 +256,21 @@ function renderMoviesList(
         movieContainer.appendChild(titleMovie)
         container.appendChild(movieContainer);
 
-        movieContainer.addEventListener('click', () => {
+        movieImg.addEventListener('click', () => {
             detailMovie(movie.id);
             location.hash = `#movie=${movie.id}`
         });
          
     });
+}
+
+function validateButtonLike(icon, movie) {
+    const favoriteMoviesList = favoritesMoviesList();
+    if(favoriteMoviesList && favoriteMoviesList.find(item => item.id === movie.id)){
+        icon.classList.add('btn-primary');
+    }else {
+        icon.classList.add('btn-secondary');
+    }
 }
 
 function renderCategoryList(container, categories) {
@@ -231,6 +294,7 @@ function renderCategoryList(container, categories) {
             categoryLabel.textContent = `: ${category.name}`
             const selectlabel = document.getElementById(category.id);
             selectlabel.style.background = '#FF640A';
+
             getMoviesByCategories(category.id);
         })
     });
@@ -292,10 +356,6 @@ async function detailMovie(id) {
     renderCategoryList(movieDetailCategoriesList, movie.genres);
     similarMoviesContainer.classList.add('slider-container');
     getSimilarMovies(similarMoviesContainer, movie.id);
-
-
-
-    
 }
 
 async function getSimilarMovies(container, id) {
@@ -316,5 +376,15 @@ function playtrailerButton(container) {
     playTrailerBtn.appendChild(buttonText);
 }
 
+function handleScroll() {
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    return (scrollTop + clientHeight) >= scrollHeight - 15;
+}
+
 getTrendingMoviesPreview();
 getCategoriesPreview();
+getFavoritesPreview();
+
+export const getPaginatedTradeMovies = () => getPaginatedMovies('trending/movie/day?');
+export const getPaginatedSearchMovies = (query) => getPaginatedMovies('search/movie', {query})
+export const getPaginatedMoviesByCategories = (id) => getPaginatedMovies('discover/movie', { with_genres: id});
