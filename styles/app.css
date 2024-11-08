@@ -31,7 +31,7 @@ header {
 .header-container {
     display: flex;
     justify-content: space-between;
-    max-width: 1500px;
+    max-width: 1440px;
     margin: auto;
 }
 
@@ -88,7 +88,7 @@ li a {
 }
 
 section {
-    max-width: 1500px;
+    max-width: 1440px;
     margin: auto;
     padding-top: var(--space);
 }
@@ -105,7 +105,8 @@ section {
 .slider-container {
     display: flex;
     overflow-x: auto;
-    max-width: 1500px;
+    overflow-y: hidden;
+    max-width: 1440px;
     margin: auto;
     padding-top: var(--space);
     gap: var(--space);
@@ -116,6 +117,10 @@ section {
     background: var(--secondary);
 }
 
+.movie-container {
+    position: relative;
+}
+
 .movie-container p {
     max-width: 200px ;
     color: var(--white);
@@ -124,20 +129,50 @@ section {
 }
 
 .movie-img {
-    width: 200px;
+    max-width: 200px;
     min-height: 200px;
     border-radius: var(--element-radius);
+    transition: all .2s ease-in-out;
+}
+
+.movie-img:hover {
+    transform: scale(1.1);
+}
+
+.movie-btn {
+    cursor: pointer;
+    position: absolute;
+    z-index: 1;
+    background: none;
+    border: none;
+    left: 85%
+}
+
+.movie-btn i {
+    padding: 5px;
+    border-radius: 100%;
+    font-size: larger;
 }
 
 .movie-img--loader {
     background: var(--secondary);
+    width: 200px;
     height: 300px;
 }
 .loader:nth-child(1) {
-    animation-delay: 1s !important;
+    animation-delay: .5s !important;
 }
 .loader:nth-child(2) {
-    animation-delay: 2s !important;
+    animation-delay: 1s !important;
+}
+.loader:nth-child(3) {
+    animation-delay: .5s !important;
+}
+.loader:nth-child(4) {
+    animation-delay: 1s !important;
+}
+.loader:nth-child(5) {
+    animation-delay: .5s !important;
 }
 
 #hero {
@@ -167,7 +202,7 @@ section {
 .categories-list, .search-list, .general-list {
     display: flex;
     gap: var(--space);
-    max-width: 1500px;
+    max-width: 1440px;
     flex-wrap: wrap;
     padding-top: var(--space);
 }

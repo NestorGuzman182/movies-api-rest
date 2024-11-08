@@ -1,12 +1,13 @@
 import { getCategoriesPreview, getTrendingMoviesPreview, 
          getResultSearchMovies, getTrendingMovies,
-        getPaginatedTradeMovies 
+        getPaginatedTradeMovies, getPaginatedMoviesByCategories , getPaginatedSearchMovies
 } from './main.js'
 import { trendingView, controlsBtn, 
     hero, categoriesSection, movieSection, searchMoviesSection,
     searchInput, 
     searchButton, backButton, viewMoreTradesMovies,
-    trendingPreviewContainer, generalSection
+    trendingPreviewContainer, generalSection,
+    favoriteSection
 } from './nodes.js';
 
 searchButton.addEventListener('click', () => location.hash = `search=${searchInput.value}`);
@@ -50,6 +51,8 @@ function homePage() {
     trendingPreviewContainer.classList.remove('trending-list');
     categoriesSection.classList.remove('inactive');
     movieSection.classList.add('inactive');
+    generalSection.classList.add('inactive');
+    favoriteSection.classList.remove('inactive');
 
     getTrendingMoviesPreview();
     getCategoriesPreview();
@@ -58,24 +61,39 @@ function homePage() {
 function categoryPage() {
     controlsBtn.classList.remove('inactive');
     trendingView.classList.add('inactive');
+    generalSection.classList.remove('inactive');
+    favoriteSection.classList.add('inactive');
+
+
+    infiniteScroll = getPaginatedMoviesByCategories;
 }
+
 function movieDetailPage() {
     controlsBtn.classList.remove('inactive');
     movieSection.classList.remove('inactive');
     trendingView.classList.add('inactive');
     categoriesSection.classList.add('inactive');
-    searchMoviesSection.classList.add('inactive')
+    searchMoviesSection.classList.add('inactive');
+    generalSection.classList.add('inactive');
+    favoriteSection.classList.add('inactive');
 }
+
 function searchPage() {
     controlsBtn.classList.remove('inactive');
     trendingView.classList.add('inactive');
     categoriesSection.classList.add('inactive');
     movieSection.classList.add('inactive')
     searchMoviesSection.classList.remove('inactive');
+    generalSection.classList.remove('inactive');
+    favoriteSection.classList.add('inactive');
+
 
     const [_, query] = location.hash.split('=');
     getResultSearchMovies(query);
+    console.log(query)
+    infiniteScroll = () => getPaginatedSearchMovies(query);
 }
+
 function trendsPage() {
     controlsBtn.classList.remove('inactive');
     hero.classList.add('inactive');
@@ -83,6 +101,8 @@ function trendsPage() {
     categoriesSection.classList.add('inactive');
     trendingView.style.textAlign = 'center';
     generalSection.classList.remove('inactive');
+    favoriteSection.classList.add('inactive');
+
 
     getTrendingMovies();
     infiniteScroll = getPaginatedTradeMovies;
