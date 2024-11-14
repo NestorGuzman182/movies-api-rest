@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Remy Movies</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./styles/app.css">
@@ -13,7 +13,10 @@
 <body>
     <header>
         <div id="header" class="header-container">
-            <h2 class="header-title">Remy Movies</h2>
+            <i class="fa-solid fa-bars"></i>
+            <h2 class="header-title">
+                <img src="src/img/LogoMovies.png" alt="">
+            </h2>
             <ul>
                 <li><a href="">Home</a></li>
                 <li><a href="">Trending Movies</a></li>
@@ -21,11 +24,13 @@
                 <li><a href="">Popular</a></li>
                 <li><a href="">Upcoming</a></li>
             </ul>
-            <form id="search-form" class="search-container">
-                <input id='input-form' type="text" placeholder="Search">
-                <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </form>
-            <select name="" id="language-select"></select>
+            <div class="form-container">
+                <form id="search-form" class="search-container">
+                    <input id='input-form' type="text" placeholder="Search">
+                    <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+                <select name="" id="language-select"></select>
+            </div>
         </div>
     </header>
     <div class="general">

@@ -25,18 +25,22 @@ body {
 
 header {
     background: var(--dark);
-    padding: 10px 0;
 }
 
 .header-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     max-width: 1440px;
     margin: auto;
 }
 
 .header-title {
     color: var(--primary)
+}
+
+.header-title img {
+    height: 60px;
 }
 
 .button-title {
@@ -48,12 +52,23 @@ header {
     border-radius: var(--element-radius);
 }
 
+.header-container i {
+    display: none;
+    color: var(--white);
+}
+
 .header-container input {
     background-color: var(--secondary);
     border: none;
+    border-radius: var(--element-radius) 0px 0px var(--element-radius);
     color: var(--white);
     padding: 0 10px;
     outline: none;
+}
+
+.form-container {
+    display: inherit;
+    height: 40px;
 }
 
 .search-container:focus-within {
@@ -81,6 +96,10 @@ li a {
     color: var(--white);
     background: var(--secondary);
     border: none;
+}
+
+.search-container button i {
+    display: block;
 }
 
 .search-container input, #search-name {
@@ -122,14 +141,14 @@ section {
 }
 
 .movie-container p {
-    max-width: 200px ;
+    max-width: 170px;
     color: var(--white);
     padding: calc(var(--space)/2) 0px;
     font-weight: 700;
 }
 
 .movie-img {
-    max-width: 200px;
+    max-width: 170px;
     min-height: 200px;
     border-radius: var(--element-radius);
     transition: all .2s ease-in-out;
@@ -191,7 +210,7 @@ section {
     height: inherit;
     max-width: 640px;
     align-content: center;
-    margin: var(--space);
+    margin: 0 var(--space);
 }
 
 #categories-preview, #search-preview{
@@ -256,7 +275,7 @@ section {
     left: 13%;
 }
 
-.controls button i {
+.controls button i,  .header-container i{
     font-size: larger;
 }
 
@@ -306,5 +325,41 @@ footer p {
     }
     50% {
         opacity: 0%;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        justify-content: space-around;
+    }
+    .header-container i {
+        display: block;
+    }
+    .header-container ul {
+        display: none;
+    }
+    #language-select, .search-container input {
+        display: none;
+    }
+    .search-container button {
+        background: none;
+    }
+    .trending-container {
+        padding-top: 0;
+    }
+    #hero {
+        background-size: 670px;
+        background-position: top;
+        height: 370px;
+        margin-bottom: calc(var(--space) * 2) ;
+    }
+    .hero-info {
+        align-content: end;
+    }
+    .hero-info .title {
+        margin-bottom: var(--space);
+    }
+    .hero-info .description {
+        display: none;
     }
 }

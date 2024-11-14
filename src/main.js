@@ -39,7 +39,6 @@ function saveFavoriteMovie(movie) {
 
     if(listMovies.length > 0 && listMovies.find( item => item.id === movie.id)) {
         const arr = listMovies.findIndex(item => item.id === movie.id)
-        console.log(arr)
         favoriteMovies.splice(arr, 1)
     } else {
         favoriteMovies.push(movie)
@@ -99,6 +98,7 @@ export const getCategoriesPreview = async function  getCategoriesPreview() {
 
 export function getFavoritesPreview() {
     const favoriteMovies = JSON.parse(localStorage.getItem('liked_movies'));
+
     if(favoriteMovies && favoriteMovies.length > 0) {
         renderMoviesList(favoritesMoviesContainer, favoriteMovies, { lzLoad: true, clean: true})
     } else {
@@ -160,7 +160,7 @@ async function getPaginatedMovies(path, {idCategory = null, query = null} ={}) {
     const pageIsNotmax = page < maxPage;
 
     if (scrollIsBottom && pageIsNotmax) {
-      console.log(query);
+
       page++;
       const { data } = await api(path, {
         params: {
@@ -266,6 +266,10 @@ function renderMoviesList(
 
 function validateButtonLike(icon, movie) {
     const favoriteMoviesList = favoritesMoviesList();
+
+    if(Object.keys(favoriteMoviesList).length === 0) {
+        return {}
+    } 
     if(favoriteMoviesList && favoriteMoviesList.find(item => item.id === movie.id)){
         icon.classList.add('btn-primary');
     }else {
