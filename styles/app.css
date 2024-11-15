@@ -106,6 +106,11 @@ li a {
     color: var(--primary);
 }
 
+#back-btn {
+    background: rgba(0,0,0,0.6);
+    border-radius: 100%;
+}
+
 section {
     max-width: 1440px;
     margin: auto;
@@ -361,5 +366,19 @@ footer p {
     }
     .hero-info .description {
         display: none;
+    }
+    .trending-container .title.button-title, .trending-container article, 
+    #categories-preview, .favorites-container, .movie-detail {
+        margin: auto var(--space);
+    }
+    .categories-list {
+        justify-content: space-between;
+    }
+
+    .info-movie {
+        flex-direction: column;
+    }
+    .info-movie .categories-list {
+        justify-content: flex-start;
     }
 }

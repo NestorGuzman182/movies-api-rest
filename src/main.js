@@ -31,7 +31,7 @@ const api = axios.create({
 });
 
 function favoritesMoviesList () {
-    return JSON.parse(localStorage.getItem('liked_movies'));
+    return JSON.parse(localStorage.getItem('liked_movies')) || [];
 }
 
 function saveFavoriteMovie(movie) {
@@ -267,9 +267,6 @@ function renderMoviesList(
 function validateButtonLike(icon, movie) {
     const favoriteMoviesList = favoritesMoviesList();
 
-    if(Object.keys(favoriteMoviesList).length === 0) {
-        return {}
-    } 
     if(favoriteMoviesList && favoriteMoviesList.find(item => item.id === movie.id)){
         icon.classList.add('btn-primary');
     }else {
