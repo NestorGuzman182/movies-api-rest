@@ -3,10 +3,9 @@
     --secondary: #213944;
     --dark: #23252B;
     --black: #000;
-    --white: #fff;
-
+    --white: #dadada;
     --element-radius: 10px;
-    --space: 20px;
+    --space: 1.5rem;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
@@ -84,6 +83,8 @@ ul {
 li a {
     color: var(--white);
     text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
 }
 
 .search-container {
@@ -105,16 +106,23 @@ li a {
 .search-container input, #search-name {
     color: var(--primary);
 }
-
+#language-select {
+    padding: 0 10px;
+    background-color: var(--secondary);
+    color: var(--white);
+    border: none;
+    border-left: 1px solid var(--primary);
+    border-radius: 0 var(--element-radius) var(--element-radius) 0;
+}
 #back-btn {
     background: rgba(0,0,0,0.6);
     border-radius: 100%;
 }
 
-section {
+section, .article-container {
     max-width: 1440px;
     margin: auto;
-    padding-top: var(--space);
+    height: -webkit-fill-available;
 }
 
 .title {
@@ -200,14 +208,15 @@ section {
 }
 
 #hero {
-    height: 600px;
+    height: 700px;
     width: auto;
     background-repeat: no-repeat;
-    background-size: cover;
     background-image: 
         linear-gradient(to right, rgba(0,0,0,0.5) 0%, transparent 100%),
         linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%);
     transition: opacity 1s ease-in-out;
+    background-position: top;
+    background-size: cover;
     opacity: 1;
 }
 
@@ -245,8 +254,8 @@ section {
 .description {
     color: var(--white);
     margin:  var(--space) 0px;
-    max-width: 450px;
-    font-size: small;
+    max-width: 600px;
+    font-size: 1rem;
     letter-spacing: 1px;
     line-height: var(--space);
 }
@@ -265,12 +274,13 @@ section {
 
 .btn-primary {
     background-color: var(--primary);
-    color: var(--white);
+    color: var(--black);
 }
 
 .btn-secondary {
     color: var(--primary);
     background: none;
+    font-weight: bolder;
 }
 
 .controls {
@@ -303,6 +313,7 @@ section {
     display: flex;
     justify-content: space-evenly;
     margin: auto;
+    padding-top: 40px;
     align-items: center;
 }
 

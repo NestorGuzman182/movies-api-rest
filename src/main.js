@@ -57,7 +57,7 @@ const lazyLoader = new IntersectionObserver((entries) => {
         }    });
 })
 
-const baseImgURL = 'https://image.tmdb.org/t/p/w300';
+const baseImgURL = 'https://image.tmdb.org/t/p/w1280';
 
 let intervalId;
 let page = 1;
