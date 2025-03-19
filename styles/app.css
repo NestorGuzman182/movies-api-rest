@@ -1,5 +1,5 @@
 :root {
-    --primary: #FF640A;
+    --primary: #EC5800;
     --secondary: #213944;
     --dark: #23252B;
     --black: #000;
@@ -8,7 +8,8 @@
     --space: 1.5rem;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 
 *{
     margin: 0;
@@ -19,7 +20,7 @@
 body {
     background: var(--black);
     max-width: 1920px;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 header {
@@ -124,7 +125,9 @@ section, .article-container {
     margin: auto;
     height: -webkit-fill-available;
 }
-
+h3 {
+    font-size: 3rem;
+}
 .title {
     color: var(--white);
     margin-top: var(--space);
@@ -240,11 +243,24 @@ section, .article-container {
     padding-top: var(--space);
 }
 
-.categories-list h5 {
+.categories-list {
+    max-height: 200px;
+    overflow: auto;
+    scrollbar-color: var(--primary) var(--dark);
+}
+
+.categories-list h5, .categories-list h6 {
     color: var(--white);
     background: var(--secondary);
-    padding: calc(var(--space)/2) var(--space) ;
+    text-align: center;
     border-radius: var(--element-radius);
+}
+.categories-list h5 {
+    width: 150px;
+    padding: calc(var(--space)/2) var(--space) ;
+}
+.categories-list h6 {
+    padding: calc(var(--space)/4) calc(var(--space)/2) ;
 }
 
 .inactive {
@@ -275,6 +291,7 @@ section, .article-container {
 .btn-primary {
     background-color: var(--primary);
     color: var(--black);
+    margin-top: var(--space);
 }
 
 .btn-secondary {
@@ -297,6 +314,7 @@ section, .article-container {
 .movie-detail {
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center;
 }
 
 .scoring-container {
@@ -315,6 +333,10 @@ section, .article-container {
     margin: auto;
     padding-top: 40px;
     align-items: center;
+}
+
+.info-movie img {
+    max-width: 300px;
 }
 
 .trending-list{

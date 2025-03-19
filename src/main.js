@@ -58,6 +58,7 @@ const lazyLoader = new IntersectionObserver((entries) => {
 })
 
 const baseImgURL = 'https://image.tmdb.org/t/p/w1280';
+const baseVideoURL = 'https://www.youtube.com/watch?v=';
 
 let intervalId;
 let page = 1;
@@ -93,7 +94,7 @@ export const getCategoriesPreview = async function  getCategoriesPreview() {
     const { data } = await api('genre/movie/list?');
     
     const categories = data.genres;
-    renderCategoryList(categoriesPreviewContainer, categories);
+    renderCategoryList(categoriesPreviewContainer, categories, 'h5');
 }
 
 export function getFavoritesPreview() {
@@ -152,7 +153,7 @@ async function  getMoviesByCategories(id) {
     const movies = data.results;
 
     maxPage = data.total_pages;
-    renderMoviesList(generalMoviesContainer, movies, { lzLoad: true, clean:false});
+    renderMoviesList(generalMoviesContainer, movies, { lzLoad: true });
 }
 
 async function getPaginatedMovies(path, {idCategory = null, query = null} ={}) {
@@ -193,18 +194,18 @@ function renderHeroMovie(movie) {
         const heroInfo = document.querySelector('.hero-info');
         heroInfo.innerHTML = '';
         const containerTitle = document.createElement('h3');
-        heroInfo.appendChild(containerTitle)
-        containerTitle.classList.add('title')
-        containerTitle.textContent = movie.title
+        heroInfo.appendChild(containerTitle);
+        containerTitle.classList.add('title');
+        containerTitle.textContent = movie.title;
     
         const synopsisContainer = document.createElement('p');
         heroInfo.appendChild(synopsisContainer);
         synopsisContainer.classList.add('description')
         synopsisContainer.textContent = movie.overview;
-    
-        playtrailerButton(heroInfo);
-    }, 1000);
- 
+        
+        playtrailerButton(heroInfo, movie.id);
+        
+    }, 700);
 }
 
 function renderMoviesList(
@@ -274,14 +275,15 @@ function validateButtonLike(icon, movie) {
     }
 }
 
-function renderCategoryList(container, categories) {
+function renderCategoryList(container, categories, tag) {
     container.innerHTML = '';
+
     categories.map(category => {
         
         const categoryContainer = document.createElement('div');
         categoryContainer.classList.add('category-container');
 
-        const categoryTitle = document.createElement('h5');
+        const categoryTitle = document.createElement(tag);
         categoryTitle.classList.add('category-title');
         categoryTitle.setAttribute('id', category.id);
 
@@ -292,7 +294,10 @@ function renderCategoryList(container, categories) {
 
         categoryTitle.addEventListener('click', () =>{ 
             location.hash = `#category=${category.id}`;
-            categoryLabel.textContent = `: ${category.name}`
+            categoryLabel.textContent = `: ${category.name}`;
+            document.querySelectorAll('.category-title').forEach(label => {
+                label.style.background = '#213944';
+            });
             const selectlabel = document.getElementById(category.id);
             selectlabel.style.background = '#FF640A';
 
@@ -307,7 +312,7 @@ async function detailMovie(id) {
 
     movieSection.style.backgroundImage = `
         linear-gradient(to right, rgba(0,0,0,7), rgba(0,0,0,0.4)),
-    linear-gradient(to top, rgba(0,0,0,6), rgba(0,0,0,0.2)),
+        linear-gradient(to top, rgba(0,0,0,6), rgba(0,0,0,0.2)),
         url(${baseImgURL + movie.poster_path})
     `
 
@@ -345,16 +350,17 @@ async function detailMovie(id) {
     releaseDate.innerHTML = `<strong>Released: </strong>${movie.release_date}`;
     infoMovie.appendChild(releaseDate);
 
-    playtrailerButton(infoMovie);
+    await setTimeout(() => playtrailerButton(infoMovie, movie.id), 500)
 
     const categoriesListTemplate = `
-            <h3 class="title" style="margin-top:">Categories</h3>
+            <h4 class="title" style="margin-top:">Categories</h4>
             <div class="categories-list"></div>
     `
     infoMovie.innerHTML += categoriesListTemplate;
     const movieDetailCategoriesList = document.querySelector('#movie-detail .categories-list');
 
-    renderCategoryList(movieDetailCategoriesList, movie.genres);
+    renderCategoryList(movieDetailCategoriesList, movie.genres, 'h6');
+
     similarMoviesContainer.classList.add('slider-container');
     getSimilarMovies(similarMoviesContainer, movie.id);
 }
@@ -366,7 +372,7 @@ async function getSimilarMovies(container, id) {
     renderMoviesList(container, similarMovies);
 }
 
-function playtrailerButton(container) {
+function playtrailerButton(container, id) {
     const playTrailerBtn = document.createElement('button');
     const iconPlay = document.createElement('i');
     container.appendChild(playTrailerBtn);
@@ -375,6 +381,13 @@ function playtrailerButton(container) {
     playTrailerBtn.classList.add('btn', 'btn-primary');
     const buttonText = document.createTextNode(' PLAY TRAILER');
     playTrailerBtn.appendChild(buttonText);
+
+    playTrailerBtn.addEventListener('click', async() => {
+         const { data } = await api(`movie/${id}/videos`);
+         const movieKey = await data.results[0].key;
+         const movieURL = await baseVideoURL+movieKey;
+         window.open(movieURL, '_blank');
+    })
 }
 
 function handleScroll() {

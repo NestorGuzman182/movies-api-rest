@@ -2,10 +2,11 @@ import { getCategoriesPreview, getTrendingMoviesPreview,
          getResultSearchMovies, getTrendingMovies,
         getPaginatedTradeMovies, getPaginatedMoviesByCategories , getPaginatedSearchMovies
 } from './main.js'
-import { trendingView, controlsBtn, 
+import { 
+    trendingMenu, categoryMenu, trendingView, 
+    controlsBtn, searchInput, searchButton, backButton,
     hero, categoriesSection, movieSection, searchMoviesSection,
-    searchInput, 
-    searchButton, backButton, viewMoreTradesMovies,
+    viewMoreTradesMovies,
     trendingPreviewContainer, generalSection,
     favoriteSection
 } from './nodes.js';
@@ -37,7 +38,7 @@ function navigator() {
     }
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
-    console.log(infiniteScroll)
+   /*  console.log(infiniteScroll) */
     if(infiniteScroll) {
         window.addEventListener('scroll', infiniteScroll);
     }
@@ -59,16 +60,20 @@ function homePage() {
 }
 
 function categoryPage() {
+    generalSection.classList.add('inactive');
+    hero.classList.add('inactive');
     controlsBtn.classList.remove('inactive');
     trendingView.classList.add('inactive');
+    categoriesSection.classList.remove('inactive');
     generalSection.classList.remove('inactive');
     favoriteSection.classList.add('inactive');
-
+    movieSection.classList.add('inactive');
 
     infiniteScroll = getPaginatedMoviesByCategories;
 }
 
 function movieDetailPage() {
+    hero.classList.add('inactive');
     controlsBtn.classList.remove('inactive');
     movieSection.classList.remove('inactive');
     trendingView.classList.add('inactive');
@@ -87,7 +92,6 @@ function searchPage() {
     generalSection.classList.remove('inactive');
     favoriteSection.classList.add('inactive');
 
-
     const [_, query] = location.hash.split('=');
     getResultSearchMovies(query);
     console.log(query)
@@ -102,8 +106,11 @@ function trendsPage() {
     trendingView.style.textAlign = 'center';
     generalSection.classList.remove('inactive');
     favoriteSection.classList.add('inactive');
-
+    movieSection.classList.add('inactive');
 
     getTrendingMovies();
     infiniteScroll = getPaginatedTradeMovies;
 }
+
+trendingMenu.addEventListener('click', trendsPage);
+categoryMenu.addEventListener('click', categoryPage);

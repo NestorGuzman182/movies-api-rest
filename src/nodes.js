@@ -1,6 +1,10 @@
 const $ = (id) => document.querySelector(id) ;
 
+//menu items
+export const trendingMenu = $('#trending-menu');
+export const categoryMenu = $('#category-menu');
 
+//sections
 export const categoriesSection = $('#categories-preview');
 export const searchMoviesSection = $('#search-preview');
 export const generalSection = $('#general-container');
