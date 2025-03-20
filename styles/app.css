@@ -146,6 +146,11 @@ h3 {
     padding-top: var(--space);
     gap: var(--space);
     scrollbar-color: var(--primary) var(--dark);
+    mask-image: linear-gradient(to right, 
+        rgba(0, 0, 0, 0) 0%, 
+        rgba(0, 0, 0, 1) 1%, 
+        rgba(0, 0, 0, 1) 97%, 
+        rgba(0, 0, 0, 0) 100%);
 }
 .loader {
     animation: loading-skeleton infinite 1.5s;
@@ -154,7 +159,6 @@ h3 {
 
 .movie-container {
     position: relative;
-    margin: 0 auto;
 }
 
 .movie-container p {
@@ -241,7 +245,7 @@ h3 {
     gap: var(--space);
     max-width: 1440px;
     flex-wrap: wrap;
-    padding-top: var(--space);
+    padding: var(--space);
 }
 
 .categories-list {
@@ -343,6 +347,10 @@ h3 {
 .trending-list{
     flex-wrap: wrap;
 }
+.favorites-container {
+    border-top: 1px solid var(--dark);
+    margin-top: var(--space);
+}
 
 footer {
     text-align: center;
@@ -408,6 +416,9 @@ footer p {
     }
     .categories-list {
         justify-content: space-between;
+    }
+    .controls {
+        left: 2.5rem;
     }
 
     .info-movie {
