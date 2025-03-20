@@ -202,10 +202,10 @@ function renderHeroMovie(movie) {
         heroInfo.appendChild(synopsisContainer);
         synopsisContainer.classList.add('description')
         synopsisContainer.textContent = movie.overview;
-        
+        console.log('trap ',movie.backdrop_path);
         playtrailerButton(heroInfo, movie.id);
         
-    }, 700);
+    }, 1000);
 }
 
 function renderMoviesList(

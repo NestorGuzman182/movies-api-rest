@@ -154,6 +154,7 @@ h3 {
 
 .movie-container {
     position: relative;
+    margin: 0 auto;
 }
 
 .movie-container p {
@@ -226,8 +227,8 @@ h3 {
 .hero-info {
     height: inherit;
     max-width: 640px;
-    align-content: center;
-    margin: 0 var(--space);
+    align-content: end;
+    margin: 0 var(--space) var(--space);
 }
 
 #categories-preview, #search-preview{
@@ -386,9 +387,9 @@ footer p {
         padding-top: 0;
     }
     #hero {
-        background-size: 670px;
+        background-size: auto;
         background-position: top;
-        height: 370px;
+        height: 90vh;
         margin-bottom: calc(var(--space) * 2) ;
     }
     .hero-info {
@@ -397,8 +398,9 @@ footer p {
     .hero-info .title {
         margin-bottom: var(--space);
     }
-    .hero-info .description {
-        display: none;
+   .hero-info .description {
+        max-height: 150px;
+        overflow: auto;
     }
     .trending-container .title.button-title, .trending-container article, 
     #categories-preview, .favorites-container, .movie-detail {
