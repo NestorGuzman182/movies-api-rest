@@ -84,6 +84,7 @@ function movieDetailPage() {
 }
 
 function searchPage() {
+    hero.classList.add('inactive');
     controlsBtn.classList.remove('inactive');
     trendingView.classList.add('inactive');
     categoriesSection.classList.add('inactive');
